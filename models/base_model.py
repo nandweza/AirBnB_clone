@@ -4,7 +4,7 @@ contains BaseModel definition
 """
 import uuid
 from datetime import datetime
-
+from models import storage
 
 class BaseModel:
     """
@@ -17,12 +17,13 @@ class BaseModel:
         self.updated_at = datetime.now()
 
     def __str__(self):
-        """"string repr of obj"""
+        """string repr of obj"""
         return f'[{self.__class__.__name__}] ({self.id}) {self.__dict__}'
 
     def save(self):
         """updates the public instance attribute"""
         self.updated_at = datetime.now()
+        storage.save()
 
     def to_dict(self):
         """returns a dictionary containing all key/value of __dict__
