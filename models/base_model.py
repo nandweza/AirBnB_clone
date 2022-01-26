@@ -15,7 +15,7 @@ class BaseModel:
         """initializes object using dictionary if given otherwise it gives default value"""
         if kwargs:
             for key, value in kwargs.items():
-                if key is not '__class__':
+                if key != '__class__':
                     setattr(self, key, value)
             self.created_at = datetime.strptime(kwargs['created_at'], '%Y-%m-%dT%H:%M:%S.%f')
             self.updated_at = datetime.strptime(kwargs['updated_at'], '%Y-%m-%dT%H:%M:%S.%f')
