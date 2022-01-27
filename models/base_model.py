@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-contains BaseModel definition
+contains BaseModel definitions.
 """
 import uuid
 from datetime import datetime

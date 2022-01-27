@@ -7,7 +7,7 @@ import os
 
 
 class FileStorage:
-    """class for serialization and deserialization of base classes."""
+    """class for serialization and deserialization of base classe."""
     __file_path = "file.json"
     __objects = {}
 
@@ -50,7 +50,7 @@ class FileStorage:
             FileStorage.__objects = obj_dict
 
     def attributes(self):
-        """returns the valid attributes and their types for classname."""
+        """Returns the valid attributes and their types for classname."""
 
         attributes = {
             "BaseModel":
