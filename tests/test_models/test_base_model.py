@@ -10,8 +10,6 @@ from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage
 import os
 import time
-import re
-import json
 from models import storage
 
 
@@ -39,92 +37,88 @@ class TestBaseModel(unittest.TestCase):
 
         b = BaseModel()
         self.assertEqual(str(type(b)), "<class 'models.base_model.BaseModel'>")
-        self.asserIsInstance(b, BaseModel)
+        self.assertIsInstance(b, BaseModel)
         self.assertTrue(issubclass(type(b), BaseModel))
 
     def test_3_init_no_args(self):
         """Tests __init__ with no args."""
 
         self.resetStorage()
-        with self.assertRaises(TypeError) as x:
+        with self.assertRaises(TypeError) as e:
             BaseModel.__init__()
         msg = "__init__() missing 1 required positional argument: 'self'"
-        self.assertEqual(str(x.exception), msg)
+        self.assertEqual(str(e.exception), msg)
 
     def test_3_attributes(self):
         """Tests attributes value for instance of class BaseModel."""
 
         attributes = storage.attributes()["BaseModel"]
-        v = BaseModel()
-        for k, o, in attributes.item():
-            self.assertTrue(hasattr(v, k))
-            self.assertEqual(type(getattr(v, k, None)), o)
+        o = BaseModel()
+        for k, v, in attributes.items():
+            self.assertTrue(hasattr(o, k))
+            self.assertEqual(type(getattr(o, k, None)), v)
 
-    def test_3_datetime_created(self):
-        """Tests if updated_at and created_at are current at creation."""
+    def test_3_datetime_created_at(self):
+        """Tests if created_at is a datetime obj."""
 
-        date_now = datetime.now()
         b = BaseModel()
-        diff = my_model.updated_at - my_model.created_at
-        self.assertTrue(abs(diff.total_seconds()) < 0.01)
-        diff = my_model.created_at - date_now
-        self.assertTrue(abs(diff.total_seconds()) < 0.1)
+        self.assertTrue(type(b.created_at) is datetime)
 
-    def test_3_id(self):
-        """Tests for unique user ids."""
+    def test_3_datetime_updated_at(self):
+        """Tests if updated_at is a datetime obj."""
+
+        b = BaseModel()
+        self.assertTrue(type(b.updated_at) is datetime)
+
+    def test_3_unique_id(self):
+        """Checks if instances have unique ids."""
 
         b1 = BaseModel()
         b2 = BaseModel()
         self.assertNotEqual(b1.id, b2.id)
-    def test_3_save(self):
-        """Tests the public instance method save()."""
+
+    def test_3_id(self):
+        """Checks for id"""
 
         b = BaseModel()
-        time.sleep(0.5)
-        date_now = datetime.now()
-        my_model.save()
-        diff = my_model.updated_at - date_now
-        self.assertTrue(abs(diff.total_seconds()) < 0.01)
+        self.assertTrue(hasattr(b, "id"))
+
+    def test_3_save(self):
+        """Tests the public instance method save() updates the updated_at."""
+
+        b = BaseModel()
+        b.save()
+        self.assertNotEqual(b.created_at, b.updated_at)
 
     def test_3_str(self):
-        """Test for __str__ method."""
+        """Test for __str__ representation."""
 
-        my_model = BaseModel()
-        rex = re.compiler(r"^\[(.*)\] \((.*)\) (.*)$")
-        res = rex.match(str(my_model))
-        self.assertIsNotNone(res)
-        self.assertEqual(res.group(1), "BaseModel")
-        self.assertEqual(res.group(2), my_model.id)
-        s = res.group(3)
-        s = re.sub(r"(datetime\.datetime\([^)]*\))", "'\\1'", s)
-        d = json.loads(s.replace("'", '"'))
-        d2 = my_model.__dict__.copy()
-        d2["created_at"] = repr(d2["created_at"])
-        d2["updated_at"] = repr(d2["updated_at"])
-        self.assertEqual(d, d2)
+        b = BaseModel()
+        self.assertEqual(str(b), "[BaseModel] ({}) {}".format(b.id, b.__dict__))
 
     def test_3_to_dict(self):
         """Tests for __dict__ public instance."""
 
         b = BaseModel()
-        b.name = "Allan"
-        b.email = "allannandweza@gmail.com"
-        d = b.to_dict()
-        self.assertEqual(d["id"], b.id)
-        self.assertEqual(d["__class__"], type(b).__name__)
-        self.assertEqual(d["created_at"], b.created_at.isoformat())
-        self.assertEqual(d["updated_at"], b.updated_at.isoformat())
-        self.assertEqual(d["name"], b.name)
-        self.assertEqual(d["email"], b.email)
+        d = datetime.now()
+        b.id = "12345"
+        b.created_at = b.updated_at = d
+        test_dict = {
+            "id": "12345",
+            "created_at": d.isoformat(),
+            "updated_at": d.isoformat(),
+            "__class__": "BaseModel"
+            }
+        self.assertDictEqual(test_dict, b.to_dict())
 
     def test_3_to_dict_with_no_args(self):
         """Tests to_dict with no args."""
 
         self.resetStorage()
-        with self.assertRaises(TypeError) as x:
+        with self.assertRaises(TypeError) as e:
             BaseModel.to_dict()
         msg = "to_dict() missing 1 required positional argument: 'self'"
-        self.assertEqual(str(x.exception), msg)
+        self.assertEqual(str(e.exception), msg)
 
 if __name__ == '__main__':
     unittest.main()
