@@ -120,5 +120,6 @@ class TestBaseModel(unittest.TestCase):
         msg = "to_dict() missing 1 required positional argument: 'self'"
         self.assertEqual(str(e.exception), msg)
 
+
 if __name__ == '__main__':
     unittest.main()

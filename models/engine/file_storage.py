@@ -7,7 +7,7 @@ import os
 
 
 class FileStorage:
-    """class for serialization and deserialization of base classe."""
+    """class for serialization and deserialization of base classes."""
     __file_path = "file.json"
     __objects = {}
 
@@ -50,7 +50,7 @@ class FileStorage:
         }
         return classes
 
-    def  reload(self):
+    def reload(self):
         """Deserializes JSON file into __objects."""
 
         if not os.path.isfile(FileStorage.__file_path):
