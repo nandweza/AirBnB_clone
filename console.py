@@ -71,7 +71,7 @@ class HBNBCommand(cmd.Cmd):
                 args[3] = int(args[3]) if args[3].is_integer() else args[3]
             else:
                 if args[3].startswith('"'):
-                    args[3] = args[3].lstrip('"').rstrip('"')
+                    args[3] = arg.partition('"')[2].rpartition('"')[0]
             setattr(obj, str(args[2]), args[3])
             storage.save()
 
