@@ -6,13 +6,15 @@ import uuid
 from datetime import datetime
 from models import storage
 
+
 class BaseModel:
     """
     defines all common attributes/methods for other classes
     """
 
     def __init__(self, *args, **kwargs):
-        """initializes object using dictionary if given otherwise it gives default value"""
+        """initializes object using dictionary if given otherwise it gives
+        default value"""
         if kwargs:
             for key, value in kwargs.items():
                 if key != '__class__':
@@ -39,8 +41,8 @@ class BaseModel:
     def to_dict(self):
         """returns a dictionary containing all key/value of __dict__
         of the instance"""
-        dic = vars(self)
+        dic = vars(self).copy()
         dic['__class__'] = self.__class__.__name__
         dic['updated_at'] = self.updated_at.isoformat()
         dic['created_at'] = self.created_at.isoformat()
-        return vars(self)
+        return dic

@@ -39,7 +39,7 @@ class TestBaseModel(unittest.TestCase):
 
         b = BaseModel()
         self.assertEqual(str(type(b)), "<class 'models.base_model.BaseModel'>")
-        self.asserIsInstance(b, BaseModel)
+        self.assertIsInstance(b, BaseModel)
         self.assertTrue(issubclass(type(b), BaseModel))
 
     def test_3_init_no_args(self):
@@ -56,7 +56,7 @@ class TestBaseModel(unittest.TestCase):
 
         attributes = storage.attributes()["BaseModel"]
         v = BaseModel()
-        for k, o, in attributes.item():
+        for k, o, in attributes.items():
             self.assertTrue(hasattr(v, k))
             self.assertEqual(type(getattr(v, k, None)), o)
 
@@ -64,7 +64,7 @@ class TestBaseModel(unittest.TestCase):
         """Tests if updated_at and created_at are current at creation."""
 
         date_now = datetime.now()
-        b = BaseModel()
+        my_model = BaseModel()
         diff = my_model.updated_at - my_model.created_at
         self.assertTrue(abs(diff.total_seconds()) < 0.01)
         diff = my_model.created_at - date_now
@@ -76,10 +76,11 @@ class TestBaseModel(unittest.TestCase):
         b1 = BaseModel()
         b2 = BaseModel()
         self.assertNotEqual(b1.id, b2.id)
+
     def test_3_save(self):
         """Tests the public instance method save()."""
 
-        b = BaseModel()
+        my_model = BaseModel()
         time.sleep(0.5)
         date_now = datetime.now()
         my_model.save()
@@ -90,7 +91,7 @@ class TestBaseModel(unittest.TestCase):
         """Test for __str__ method."""
 
         my_model = BaseModel()
-        rex = re.compiler(r"^\[(.*)\] \((.*)\) (.*)$")
+        rex = re.compile(r"^\[(.*)\] \((.*)\) (.*)$")
         res = rex.match(str(my_model))
         self.assertIsNotNone(res)
         self.assertEqual(res.group(1), "BaseModel")
@@ -125,6 +126,7 @@ class TestBaseModel(unittest.TestCase):
             BaseModel.to_dict()
         msg = "to_dict() missing 1 required positional argument: 'self'"
         self.assertEqual(str(x.exception), msg)
+
 
 if __name__ == '__main__':
     unittest.main()
