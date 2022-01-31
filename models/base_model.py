@@ -2,6 +2,7 @@
 """
 contains BaseModel definitions.
 """
+
 import uuid
 from datetime import datetime
 from models import storage
@@ -13,8 +14,9 @@ class BaseModel:
     """
 
     def __init__(self, *args, **kwargs):
-        """initializes object using dictionary if given otherwise it gives
-        default value"""
+        """initializes object using dictionary if given otherwise
+        it gives default value
+        """
         if kwargs:
             for key, value in kwargs.items():
                 if key != '__class__':
