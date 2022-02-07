@@ -4,7 +4,8 @@
     width: 100%;
     border: 1px solid #DDDDDD;
     border-radius: 4px;
-    display: flex;    
+    display: flex;
+    align-items: center;
 }
 
 button {
@@ -23,8 +24,8 @@ button:hover {
     opacity: 90%;
 }
 
-.locations 
-.amenities {
+.filters .locations,
+.filters .amenities {
     height: 100%;
     width: 25%;
 }
