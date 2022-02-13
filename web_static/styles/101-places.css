@@ -180,3 +180,11 @@
 .places .reviews p {
     font-size: 12px;
 }
+
+@media only screen and (max-width: 400px) {
+    .places h1 {
+    width: 95%;
+    color: #FF5A5F;
+    text-decoration: underline;
+  }
+}
